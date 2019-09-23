@@ -84,13 +84,13 @@ function createMap() {
          ]);
          map.addSource('reducedallroads-highlight', {
             "type": "vector",
-            "url": "mapbox://stchoi.cncjeb3u"
+            "url": "mapbox://stchoi.8knoxxji"
         });
          map.addLayer({
             "id": "roads-highlighted",
             "type": "line",
             "source": "reducedallroads-highlight",
-            "source-layer": "washtenaw_roads_aadt-d1kf74",
+            "source-layer": "washtenaw_roads-5dftqu",
             "filter": ["in", "OBJECTID", ""],
             "layout": {
                 "line-cap" : "round"
