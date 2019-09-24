@@ -44,10 +44,16 @@ h6{
 label{
   font-weight: bold;
 }
-
-
 .unchangingVals{
   margin-top: 10px;
   padding: 5px;
   border-bottom: 1px dashed black;
+}
+
+footer{
+  background-color: #00274c;
+}
+footer img{
+  padding: 5px;
+  height: 40px;
 }

@@ -9,21 +9,12 @@ var ru = 0 ;
 var bufferzone = 0 ;
 var population = 0 ;
 var novehicle = "" ;
-var rampid = 0 ;
+var ramp = 0 ;
 var aadt = 0 ;
 
 
 // //input is roadid, populates sidebar form // return aadt
 function createMap() {
-
-    inp_AADT = document.querySelector("#inputfieldAADT");
-    inp_NFC = document.querySelector("#inputfieldNFC");
-    inp_RAMPID = document.querySelector("#inputfieldRAMPID");
-    inp_RU = document.querySelector("#inputfieldRU");
-    inp_BUFFERZONE = document.querySelector("#inputfieldBUFFERZONE");
-    inp_POPULATION = document.querySelector("#inputfieldPOPULATION");
-    inp_NOVEHICLE = document.querySelector("#inputfieldNOVEHICLE");
-    inp_RDNAME = document.querySelector("#inputfieldRDNAME");
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoic3RjaG9pIiwiYSI6ImNqd2pkNWN0NzAyNnE0YW8xeTl5a3VqMXQifQ.Rq3qT82-ysDHcMsHGTBiQg';
 
@@ -42,8 +33,8 @@ function createMap() {
     map.on('click', ({point, lngLat}) =>{
 
         var features = map.queryRenderedFeatures(point, { layers: ['reducedallroads'] });
-
-        var {properties: {PR, BPT, EPT, RDNAME, NFC, CENSUS_TRACT, RU, BUFFERZONE, POPULATION, NO_VEHICLE, RAMP_ID, AADT}} = features[0];
+        console.log(features);
+        var {properties: {PR, BPT, EPT, RDNAME, NFC, CENSUS_TRACT, RU, BUFFERZONE, POPULATION, NO_VEHICLE, RAMP, AADT}} = features[0];
 
         popup.setLngLat(lngLat).setHTML('<h6>' + RDNAME +'</h6><p>Functional Class: '+NFC+ '<br>Population: '+ POPULATION +'</p>').addTo(map);
 
@@ -65,8 +56,13 @@ function createMap() {
         bufferzone = BUFFERZONE ;
         population = POPULATION ;
         novehicle = NO_VEHICLE ;
-        rampid = RAMP_ID ;
-        aadt = AADT;
+        ramp = RAMP ;
+        if (AADT){
+            aadt = AADT;
+        } else {
+            aadt = 0;
+        }
+
         updateVals();
     })
 
@@ -91,7 +87,7 @@ function createMap() {
             "type": "line",
             "source": "reducedallroads-highlight",
             "source-layer": "washtenaw_roads-5dftqu",
-            "filter": ["in", "OBJECTID", ""],
+            "filter": ["in", "RDNAME", ""],
             "layout": {
                 "line-cap" : "round"
             },
@@ -114,21 +110,31 @@ function createMap() {
 
 function updateVals(){
     console.log('got to updateVals');
-    inp_AADT.value = aadt;
+    valSemcogAADT = document.querySelector("#valSemcogAADT");
+    valEstimAADT = document.querySelector("#valEstimAADT")
+    inp_NFC = document.querySelector("#inputfieldNFC");
+    inp_RAMP = document.querySelector("#inputfieldRAMP");
+    inp_RU = document.querySelector("#inputfieldRU");
+    inp_BUFFERZONE = document.querySelector("#inputfieldBUFFERZONE");
+    inp_POPULATION = document.querySelector("#inputfieldPOPULATION");
+    inp_NOVEHICLE = document.querySelector("#inputfieldNOVEHICLE");
+    inp_RDNAME = document.querySelector("#valRDNAME");
+
+    valSemcogAADT.innerHTML = aadt;
     inp_NFC.value = nfc;
-    inp_RAMPID.value = rampid;
+    inp_RAMP.value = ramp;
     inp_RU.value= ru;
     inp_BUFFERZONE.value = bufferzone;
     inp_POPULATION.value = population;
     inp_NOVEHICLE.value = novehicle;
-    inp_RDNAME.value = rdname;
+    inp_RDNAME.innerHTML = rdname;
   }
 
 function updateFromSearch(object){
     console.log('got to updatefromsearch')
     aadt = object.properties.AADT;
     nfc = object.properties.NFC;
-    rampid = object.properties.RAMP_ID;
+    ramp = object.properties.RAMP;
     ru = object.properties.RU;
     bufferzone =  object.properties.BUFFERZONE;
     population = object.properties.POPULATION;
@@ -144,14 +150,14 @@ function updateFromSearch(object){
 
 function listenForVals(){
     event.preventDefault();
-    val_AADT = document.querySelector("#inputfieldAADT").value;
+    // valSemcogAADT = document.querySelector("#valSemcogAADT").value;
     val_NFC = document.querySelector("#inputfieldNFC").value;
-    val_RAMPID = document.querySelector("#inputfieldRAMPID").value;
+    val_RAMP = document.querySelector("#inputfieldRAMP").value;
     val_RU = document.querySelector("#inputfieldRU").value;
     val_BUFFERZONE = document.querySelector("#inputfieldBUFFERZONE").value;
     val_POPULATION = document.querySelector("#inputfieldPOPULATION").value;
     val_NOVEHICLE = document.querySelector("#inputfieldNOVEHICLE").value;
-    val_RDNAME = document.querySelector("#inputfieldRDNAME").value;
+    val_RDNAME = document.querySelector("#valRDNAME").innerHTML;
     
     map.queryRenderedFeatures({layers : ['reducedallroads']}).map(j => j)
                                                              .forEach( obj => {
@@ -169,4 +175,40 @@ function selectOnMap(road){
       map.setFilter("roads-highlighted",  ['==', ['get', 'RDNAME'], road.properties.RDNAME]);
       map.setPaintProperty('roads-highlighted', 'line-color', 'black');
 
+}
+
+function calculateNewAADT(){
+    console.log("calculate");
+    event.preventDefault();
+    valEstimAADT = document.querySelector("#valEstimAADT");
+    val_NFC = parseInt(document.querySelector("#inputfieldNFC").value);
+    val_RAMP = parseInt(document.querySelector("#inputfieldRAMP").value);
+    val_RU = parseInt(document.querySelector("#inputfieldRU").value);
+    val_BUFFERZONE = parseInt(document.querySelector("#inputfieldBUFFERZONE").value);
+    val_POPULATION = parseInt(document.querySelector("#inputfieldPOPULATION").value);
+    val_NOVEHICLE = parseInt(document.querySelector("#inputfieldNOVEHICLE").value);
+
+    function coefficientNFC(){
+        if (val_NFC == 2){
+            console.log("nfc is 2");
+            return 3.939
+        } else if (val_NFC == 3){
+            console.log("nfc is 3");
+            return -115.222
+        } else if (val_NFC == 4){
+            console.log("nfc is 4");
+            return -156.401
+        } else if (val_NFC == 5){
+            console.log("nfc is 5");
+            return -178.466
+        } else {
+            console.log("nfc is not 2, 3, 4, or 5");
+            return 0
+        };
+    };
+
+    estimaadt = Math.pow((251.461 + coefficientNFC() -178.466*val_RAMP -3.902*val_NOVEHICLE + 11.151*val_RU), 2)
+
+    valEstimAADT.innerHTML = estimaadt;
+    // val_AADT.innerHTML = "we did it"
 }
