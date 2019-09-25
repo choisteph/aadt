@@ -38,7 +38,7 @@ function createMap() {
 
         popup.setLngLat(lngLat).setHTML('<h6>' + RDNAME +'</h6><p>Functional Class: '+NFC+ '<br>Population: '+ POPULATION +'</p>').addTo(map);
 
-        var filter = features.reduce(function(memo, features) {
+        filter = features.reduce(function(memo, features) {
 
             memo[1].push(features.properties.PR);
             memo[2].push(features.properties.BPT);
@@ -82,10 +82,10 @@ function createMap() {
       //https://stackoverflow.com/questions/47951532/mapbox-gl-expressions
          map.setPaintProperty('reducedallroads', 'line-color', ['step',
               ['get', 'NFC'],
-              '#0000FF', 2,
-              '#FFFF00', 4,
-              '#FF0000', 6,
-             '#800080'
+              'red', 2,
+              'yellow', 4,
+              'blue', 6,
+             'purple'
          ]);
          map.addSource('reducedallroads-highlight', {
             "type": "vector",
@@ -123,6 +123,7 @@ function createMap() {
 
 function updateVals(){
     console.log('got to updateVals');
+    console.log(bpt, ept, pr);
     valSemcogAADT = document.querySelector("#valSemcogAADT");
     valEstimAADT = document.querySelector("#valEstimAADT")
     inp_NFC = document.querySelector("#inputfieldNFC");
@@ -132,6 +133,9 @@ function updateVals(){
     inp_POPULATION = document.querySelector("#inputfieldPOPULATION");
     inp_NOVEHICLE = document.querySelector("#inputfieldNOVEHICLE");
     inp_RDNAME = document.querySelector("#valRDNAME");
+    inp_EPT = document.querySelector("#inputfieldEPT");
+    inp_BPT = document.querySelector("#inputfieldBPT");
+    inp_PR = document.querySelector("#inputfieldPR");
 
     valSemcogAADT.innerHTML = aadt;
     inp_NFC.value = nfc;
@@ -141,6 +145,9 @@ function updateVals(){
     inp_POPULATION.value = population;
     inp_NOVEHICLE.value = novehicle;
     inp_RDNAME.innerHTML = rdname;
+    inp_EPT.value = ept;
+    inp_BPT.value = bpt;
+    inp_PR.value= pr;
   }
 
 function updateFromSearch(object){
@@ -164,13 +171,10 @@ function updateFromSearch(object){
 function listenForVals(){
     event.preventDefault();
     // valSemcogAADT = document.querySelector("#valSemcogAADT").value;
-    val_NFC = document.querySelector("#inputfieldNFC").value;
-    val_RAMP = document.querySelector("#inputfieldRAMP").value;
-    val_RU = document.querySelector("#inputfieldRU").value;
-    val_BUFFERZONE = document.querySelector("#inputfieldBUFFERZONE").value;
-    val_POPULATION = document.querySelector("#inputfieldPOPULATION").value;
-    val_NOVEHICLE = document.querySelector("#inputfieldNOVEHICLE").value;
-    val_RDNAME = document.querySelector("#valRDNAME").innerHTML;
+    inp_EPT = document.querySelector("#inputfieldEPT").value;
+    inp_BPT = document.querySelector("#inputfieldBPT").value;
+    inp_PR = document.querySelector("#inputfieldPR").value;
+
     
     map.queryRenderedFeatures({layers : ['reducedallroads']}).map(j => j)
                                                              .forEach( obj => {
@@ -189,12 +193,7 @@ function listenForVals(){
 function selectOnMap(road){
       popup.setLngLat(road.geometry.coordinates[0]).setHTML('<h6>' + road.properties.RDNAME +'</h6><p>Functional Class: '+ road.properties.NFC + '<br>Population: '+ road.properties.POPULATION +'</p>');
 
-      map.setFilter("roads-highlighted",  ['==', [
-        "all",
-            ["in", 'PR'],
-            ["in", 'BPT'],
-            ["in", 'EPT']
-        ], road.properties.PR, road.properties.BPT, road.properties.EPT]);
+      map.setFilter("roads-highlighted", filter);
       map.setPaintProperty('roads-highlighted', 'line-color', 'black');
 
 }

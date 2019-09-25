@@ -57,3 +57,40 @@ footer img{
   padding: 5px;
   height: 40px;
 }
+
+.maplegend{
+  padding: 2px;
+}
+
+/* basic positioning */
+.legend {
+  border: 1px solid black;
+  list-style: none; 
+  padding: 10px;
+}
+.legend li { 
+  /* display: block; */
+  padding-right: 15px;
+}
+
+.legend span { 
+  display:inline-block;
+  border: 1px solid #ccc;  
+  width: 20px; 
+  height: 15px; 
+}
+
+/* your colors */
+
+.legend .red { 
+  background-color: red; }
+
+.legend .yellow { 
+  background-color: yellow; 
+}
+.legend .blue { 
+  background-color: blue;
+}
+.legend .purple { 
+  background-color: purple; 
+}
