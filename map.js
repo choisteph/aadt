@@ -33,17 +33,26 @@ function createMap() {
     map.on('click', ({point, lngLat}) =>{
 
         var features = map.queryRenderedFeatures(point, { layers: ['reducedallroads'] });
-        console.log(features);
+        // console.log(features);
         var {properties: {PR, BPT, EPT, RDNAME, NFC, CENSUS_TRACT, RU, BUFFERZONE, POPULATION, NO_VEHICLE, RAMP, AADT}} = features[0];
 
         popup.setLngLat(lngLat).setHTML('<h6>' + RDNAME +'</h6><p>Functional Class: '+NFC+ '<br>Population: '+ POPULATION +'</p>').addTo(map);
 
-        var filter = features.reduce(function(memo, feature) {
-            memo.push(feature.properties.RDNAME);
-            return memo;
-        }, ['in', 'RDNAME']);
+        var filter = features.reduce(function(memo, features) {
 
-        map.setFilter("roads-highlighted", filter);
+            memo[1].push(features.properties.PR);
+            memo[2].push(features.properties.BPT);
+            memo[3].push(features.properties.EPT);
+            return memo;
+        }, [ "all",
+            ["in", 'PR'],
+            ["in", 'BPT'],
+            ["in", 'EPT']
+        ]);
+
+
+
+        map.setFilter("roads-highlighted", filter)
         // map.setPaintProperty('roads-highlighted', 'line-color', 'black');
 
         pr = PR ;
@@ -87,7 +96,11 @@ function createMap() {
             "type": "line",
             "source": "reducedallroads-highlight",
             "source-layer": "washtenaw_roads-5dftqu",
-            "filter": ["in", "RDNAME", ""],
+            "filter": [ "all",
+                ["in", 'PR'],
+                ["in", 'BPT'],
+                ["in", 'EPT']
+            ],
             "layout": {
                 "line-cap" : "round"
             },
@@ -161,10 +174,14 @@ function listenForVals(){
     
     map.queryRenderedFeatures({layers : ['reducedallroads']}).map(j => j)
                                                              .forEach( obj => {
-                                                                  if ( obj.properties.RDNAME === val_RDNAME ){
-                                                                      console.log("match");
-                                                                      selectOnMap(obj);
-                                                                      updateFromSearch(obj);
+                                                                  if ( obj.properties.EPT === ept ){
+                                                                      if (obj.properties.BPT === bpt){
+                                                                          if (obj.properties.PR === pr){
+                                                                                console.log("match");
+                                                                                selectOnMap(obj);
+                                                                                updateFromSearch(obj);
+                                                                          }
+                                                                      }
                                                                   }
                                                             });
 }
@@ -172,7 +189,12 @@ function listenForVals(){
 function selectOnMap(road){
       popup.setLngLat(road.geometry.coordinates[0]).setHTML('<h6>' + road.properties.RDNAME +'</h6><p>Functional Class: '+ road.properties.NFC + '<br>Population: '+ road.properties.POPULATION +'</p>');
 
-      map.setFilter("roads-highlighted",  ['==', ['get', 'RDNAME'], road.properties.RDNAME]);
+      map.setFilter("roads-highlighted",  ['==', [
+        "all",
+            ["in", 'PR'],
+            ["in", 'BPT'],
+            ["in", 'EPT']
+        ], road.properties.PR, road.properties.BPT, road.properties.EPT]);
       map.setPaintProperty('roads-highlighted', 'line-color', 'black');
 
 }
@@ -207,7 +229,7 @@ function calculateNewAADT(){
         };
     };
 
-    estimaadt = Math.pow((251.461 + coefficientNFC() -178.466*val_RAMP -3.902*val_NOVEHICLE + 11.151*val_RU), 2)
+    estimaadt = Math.round( Math.pow((251.461 + coefficientNFC() -178.466*val_RAMP -3.902*val_NOVEHICLE + 11.151*val_RU), 2))
 
     valEstimAADT.innerHTML = estimaadt;
     // val_AADT.innerHTML = "we did it"
