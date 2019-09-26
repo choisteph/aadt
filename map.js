@@ -6,8 +6,7 @@ var rdname = '' ;
 var nfc = 0 ;
 var censustract = "" ;
 var ru = 0 ;
-var bufferzone = 0 ;
-var population = 0 ;
+var housing = 0 ;
 var novehicle = "" ;
 var ramp = 0 ;
 var aadt = 0 ;
@@ -34,9 +33,9 @@ function createMap() {
 
         var features = map.queryRenderedFeatures(point, { layers: ['reducedallroads'] });
         // console.log(features);
-        var {properties: {PR, BPT, EPT, RDNAME, NFC, CENSUS_TRACT, RU, BUFFERZONE, POPULATION, NO_VEHICLE, RAMP, AADT}} = features[0];
+        var {properties: {PR, BPT, EPT, RDNAME, NFC, CENSUS_TRACT, RU, HOUSING, NO_VEHICLE, RAMP, AADT}} = features[0];
 
-        popup.setLngLat(lngLat).setHTML('<h6>' + RDNAME +'</h6><p>Functional Class: '+NFC+ '<br>Population: '+ POPULATION +'</p>').addTo(map);
+        popup.setLngLat(lngLat).setHTML('<h6>' + RDNAME +'</h6><p>Functional Class: '+NFC + '</p>').addTo(map);
 
         filter = features.reduce(function(memo, features) {
 
@@ -62,8 +61,7 @@ function createMap() {
         nfc = NFC ;
         censustract = CENSUS_TRACT ;
         ru = RU ;
-        bufferzone = BUFFERZONE ;
-        population = POPULATION ;
+        housing = HOUSING ;
         novehicle = NO_VEHICLE ;
         ramp = RAMP ;
         if (AADT){
@@ -123,14 +121,12 @@ function createMap() {
 
 function updateVals(){
     console.log('got to updateVals');
-    console.log(bpt, ept, pr);
     valSemcogAADT = document.querySelector("#valSemcogAADT");
     valEstimAADT = document.querySelector("#valEstimAADT")
     inp_NFC = document.querySelector("#inputfieldNFC");
     inp_RAMP = document.querySelector("#inputfieldRAMP");
     inp_RU = document.querySelector("#inputfieldRU");
-    inp_BUFFERZONE = document.querySelector("#inputfieldBUFFERZONE");
-    inp_POPULATION = document.querySelector("#inputfieldPOPULATION");
+    inp_HOUSING = document.querySelector("#inputfieldHOUSING");
     inp_NOVEHICLE = document.querySelector("#inputfieldNOVEHICLE");
     inp_RDNAME = document.querySelector("#valRDNAME");
     inp_EPT = document.querySelector("#inputfieldEPT");
@@ -141,9 +137,8 @@ function updateVals(){
     inp_NFC.value = nfc;
     inp_RAMP.value = ramp;
     inp_RU.value= ru;
-    inp_BUFFERZONE.value = bufferzone;
-    inp_POPULATION.value = population;
-    inp_NOVEHICLE.value = novehicle;
+    inp_HOUSING.value = housing;
+    inp_NOVEHICLE.value= novehicle * 1000;
     inp_RDNAME.innerHTML = rdname;
     inp_EPT.value = ept;
     inp_BPT.value = bpt;
@@ -156,8 +151,7 @@ function updateFromSearch(object){
     nfc = object.properties.NFC;
     ramp = object.properties.RAMP;
     ru = object.properties.RU;
-    bufferzone =  object.properties.BUFFERZONE;
-    population = object.properties.POPULATION;
+    housing = object.properties.HOUSING;
     novehicle = object.properties.NO_VEHICLE;
     pr = object.properties.PR ;
     bpt = object.properties.BPT ;
@@ -191,7 +185,7 @@ function listenForVals(){
 }
 
 function selectOnMap(road){
-      popup.setLngLat(road.geometry.coordinates[0]).setHTML('<h6>' + road.properties.RDNAME +'</h6><p>Functional Class: '+ road.properties.NFC + '<br>Population: '+ road.properties.POPULATION +'</p>');
+      popup.setLngLat(road.geometry.coordinates[0]).setHTML('<h6>' + road.properties.RDNAME +'</h6><p>Functional Class: '+ road.properties.NFC + '</p>');
 
       map.setFilter("roads-highlighted", filter);
       map.setPaintProperty('roads-highlighted', 'line-color', 'black');
@@ -205,31 +199,86 @@ function calculateNewAADT(){
     val_NFC = parseInt(document.querySelector("#inputfieldNFC").value);
     val_RAMP = parseInt(document.querySelector("#inputfieldRAMP").value);
     val_RU = parseInt(document.querySelector("#inputfieldRU").value);
-    val_BUFFERZONE = parseInt(document.querySelector("#inputfieldBUFFERZONE").value);
-    val_POPULATION = parseInt(document.querySelector("#inputfieldPOPULATION").value);
-    val_NOVEHICLE = parseInt(document.querySelector("#inputfieldNOVEHICLE").value);
+    val_HOUSING = parseInt(document.querySelector("#inputfieldHOUSING").value);
+    val_NOVEHICLE = parseInt(document.querySelector("#inputfieldNOVEHICLE").value) / 1000;
+
+    let rampFlag = -193.921;
+    let vehicHousing = val_NOVEHICLE - val_HOUSING;
 
     function coefficientNFC(){
         if (val_NFC == 2){
-            console.log("nfc is 2");
-            return 3.939
+            return 14.118
         } else if (val_NFC == 3){
-            console.log("nfc is 3");
-            return -115.222
+            return -170.121
         } else if (val_NFC == 4){
-            console.log("nfc is 4");
-            return -156.401
+            return -169.488
         } else if (val_NFC == 5){
-            console.log("nfc is 5");
-            return -178.466
+            return -208.668
         } else {
-            console.log("nfc is not 2, 3, 4, or 5");
             return 0
         };
     };
 
-    estimaadt = Math.round( Math.pow((251.461 + coefficientNFC() -178.466*val_RAMP -3.902*val_NOVEHICLE + 11.151*val_RU), 2))
+    function vehicleMinusHousing(){
+        return -14.128 * vehicHousing
+    };
 
-    valEstimAADT.innerHTML = estimaadt;
+    function ruralUrban(){
+        if (val_RU == 1){
+            return 17.66
+        } else {
+            return 0
+        }
+    };
+
+    function nfcRAMP(){
+        if (val_RAMP == 1){
+            if (val_NFC == 2){
+                return 22.136
+            } else if (val_NFC == 3){
+                return 67.665
+            } else {
+                return 0
+            }
+        } else {
+            return 0
+        }
+    };
+
+    function nfcVEHICLEHOUSING(){
+        if (val_NFC == 2){
+            return -4.817 * vehicHousing
+        } else if (val_NFC == 3){
+            return 21.998 * vehicHousing
+        } else if (val_NFC == 4){
+            return 7.281 * vehicHousing
+        } else if (val_NFC == 5){
+            return 10.741 * vehicHousing
+        } else {
+            return 0
+        }
+    };
+
+    function nfcIFURBAN(){
+        if (val_RU == 1){
+            if (val_NFC == 2){
+                return -29.5
+            } else if (val_NFC == 3){
+                return 21.006
+            } else if (val_NFC == 4){
+                return -10.039
+            } else if (val_NFC == 5){
+                return -3.349
+            } else {
+                return 0
+            }
+        } else {
+            return 0
+        }
+    };
+
+    estimaadt = Math.round( Math.pow((264.208 + coefficientNFC() + vehicleMinusHousing() + rampFlag + ruralUrban() + nfcRAMP() + nfcVEHICLEHOUSING() +  nfcIFURBAN()), 2))
+
+    valEstimAADT.innerHTML = estimaadt.toLocaleString();
     // val_AADT.innerHTML = "we did it"
 }

@@ -25,6 +25,64 @@
   <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
   <div class = "container-fluid">
     <div class = "row content" id="content">
+      <div class= "col-md-8">
+        <div class = "row mapboxmap">
+          <div class = "col-sm-12">
+              <div id="map"></div>
+          </div> <!--close col 12-->
+        </div> <!-- close row mapboxmap-->
+        <div class ="row">
+          <div class="col-sm-4 mapkey">
+            <div class="maplegend d-flex justify-content-start align-items-center">
+                <ul class="legend">
+                    <li><span class="red"></span> Class between 0 and 2</li>
+                    <li><span class="yellow"></span> Class between 2 and 4</li>
+                    <li><span class="blue"></span> Class between 4 and 6</li>
+                    <li><span class="purple"></span> Class greater than 6</li>
+                </ul>
+            </div> <!--close maplegend-->
+          </div> <!--close colsm6 mapkey-->
+          <div class="col-sm-8 searchstuff">
+              <div class = "row findRoad">
+                  <div class = "col-sm-12">
+                      <div class="row label">
+                        <div class="col-sm-12">
+                            <h3 class="findroadheader">Find Road</h3>
+                        </div>
+                      </div>
+                      <form id = "findsection" onsubmit = "listenForVals()">
+                          <div class = "form row group">
+                              <label for="inputEPT" class="col-sm-1 col-form-label">EPT</label>
+                              <input type="text" class = "col-sm-11 form-control searchfield" id = "inputfieldEPT" aria-label="EPT" placeholder="0" required>
+                              <small class="form-text text-muted reqparams">*This field is required.</small>
+                              <div class="invalid-feedback">
+                                Please enter a value.
+                              </div>
+                            </div>
+                            <div class = "form row group">
+                                <label for="inputBPT" class="col-sm-1 col-form-label">BPT</label>
+                                <input type="text" class = "col-sm-11 form-control searchfield" id = "inputfieldBPT" aria-label="BPT" placeholder="0" required>
+                                <small class="form-text text-muted reqparams">*This field is required.</small>
+                                <div class="invalid-feedback">
+                                  Please enter a value.
+                                </div>
+                            </div>
+                            <div class = "form row group">
+                                <label for="inputPR" class="col-sm-1 col-form-label">PR</label>
+                                <input type="text" class = "col-sm-11 form-control searchfield" id = "inputfieldPR" aria-label="PR" placeholder="0" required>
+                                <small class="form-text text-muted reqparams">*This field is required.</small>
+                                <div class="invalid-feedback">
+                                  Please enter a value.
+                                </div>
+                            </div>
+                            <button type="submit" class = "btn btn-primary submitbutton">Search</button>
+                      </form>
+                  </div> <!-- close col 12-->
+                </div> <!-- close row findRoad-->
+          </div>
+        </div> <!--close row-->
+        
+      </div> <!-- close col md 8-->
       <div class = "col-md-4 infobar">
         <div class = "unchangingVals">
             <h4 id = "semcogAADT">AADT - SEMCOG</h4>
@@ -34,87 +92,34 @@
             <h4 id = "rdName">Road Name:</h4>
             <p id = "valRDNAME">ROAD NAME</p>
         </div>
-        <!-- <h3>What if...</h3> -->
         <form onsubmit="calculateNewAADT()">
          
           <div class = "form group">
             <label for="inputNFC">FUNCTIONAL CLASS</label>
-            <input type="text" class = "form-control" id = "inputfieldNFC" aria-label="Functional Class" placeholder="0000">
+            <small class = "form-text text-muted">Between 0 and 7</small>
+            <input type="number" class = "form-control" id = "inputfieldNFC" aria-label="Functional Class" placeholder="0000"  min="0" max="7">
           </div>
           <div class = "form group">
             <label for="inputRAMPID">RAMP</label>
-            <input type="text" class = "form-control" id = "inputfieldRAMP" aria-label="Ramp" placeholder = "0000">
+            <small class = "form-text text-muted">0 = No, 1= Yes</small>
+            <input type="number" class = "form-control" id = "inputfieldRAMP" aria-label="Ramp" placeholder = "0000" min="0" max="1">
           </div>
           <div class = "form group">
             <label for="inputRU">RURAL/URBAN</label>
-            <input type="text" class = "form-control" id = "inputfieldRU" aria-label="Rural or Urban" placeholder = "0000">
+            <small class = "form-text text-muted">0 = Rural, 1= Urban</small>
+            <input type="number" class = "form-control" id = "inputfieldRU" aria-label="Rural or Urban" placeholder = "0000" min="0" max="1">
           </div>
           <div class = "form group">
-            <label for="inputBUFFERZONE">BUFFER ZONE</label>
-            <input type="text" class = "form-control" id = "inputfieldBUFFERZONE" aria-label="Buffer Zone" placeholder="0000">
-          </div>
-          <div class = "form group">
-            <label for="inputPOPULATION">POPULATION</label>
-            <input type="text" class = "form-control" id = "inputfieldPOPULATION" aria-label="Population" placeholder="0000">
+            <label for="inputHOUSING">HOUSING</label>
+            <input type="number" class = "form-control" id = "inputfieldHOUSING" aria-label="Housing" placeholder="0000">
           </div>
           <div class = "form group">
             <label for="inputNOVEHICLE">NUMBER OF VEHICLES</label>
-            <input type="text" class = "form-control" id = "inputfieldNOVEHICLE" aria-label="Number of Vehicles" placeholder="0000">
+            <input type="number" class = "form-control" id = "inputfieldNOVEHICLE" aria-label="Number of Vehicles" placeholder="0000">
           </div>
           <button type="submit" class = "btn btn-primary submitbutton" onclick = "calculateNewAADT()">Calculate AADT</button>
         </form>
       </div> <!-- close col 4-->
-      <div class= "col-md-8">
-        <div class = "row">
-          <div class = "col-sm-12">
-              <div id="map"></div>
-          </div> <!--close col 12-->
-        </div> <!-- close row-->
-        <div class ="row mapkey">
-          <div class="col-sm-12">
-            <div class="maplegend d-flex justify-content-start align-items-center">
-                <ul class="legend">
-                    <li><span class="red"></span> Class between 0 and 2</li>
-                    <li><span class="yellow"></span> Class between 2 and 4</li>
-                    <li><span class="blue"></span> Class between 4 and 6</li>
-                    <li><span class="purple"></span> Class greater than 6</li>
-                </ul>
-            </div>
-          </div>
-        </div>
-        <div class = "row findRoad">
-            <div class = "col-sm-12">
-                <h3>Find Road</h3>
-                <form id = "findsection" onsubmit = "listenForVals()">
-                    <div class = "form row group">
-                        <label for="inputEPT" class="col-sm-1 col-form-label">EPT</label>
-                        <input type="text" class = "col-sm-11 form-control" id = "inputfieldEPT" aria-label="EPT" placeholder="0" required>
-                        <small class="form-text text-muted reqparams">*This field is required.</small>
-                        <div class="invalid-feedback">
-                          Please enter a value.
-                        </div>
-                      </div>
-                      <div class = "form row group">
-                          <label for="inputBPT" class="col-sm-1 col-form-label">BPT</label>
-                          <input type="text" class = "col-sm-11 form-control" id = "inputfieldBPT" aria-label="BPT" placeholder="0" required>
-                          <small class="form-text text-muted reqparams">*This field is required.</small>
-                          <div class="invalid-feedback">
-                            Please enter a value.
-                          </div>
-                      </div>
-                      <div class = "form row group">
-                          <label for="inputPR" class="col-sm-1 col-form-label">PR</label>
-                          <input type="text" class = "col-sm-11 form-control" id = "inputfieldPR" aria-label="PR" placeholder="0" required>
-                          <small class="form-text text-muted reqparams">*This field is required.</small>
-                          <div class="invalid-feedback">
-                            Please enter a value.
-                          </div>
-                      </div>
-                      <button type="submit" class = "btn btn-primary submitbutton">Search</button>
-                </form>
-            </div> <!-- close col 12-->
-          </div> <!-- close row findRoad-->
-      </div> <!-- close col md 8-->
     </div>
     <footer class = "footer row">
       <div class = "col-sm-12 d-flex align-items-center">

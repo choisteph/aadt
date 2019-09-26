@@ -27,23 +27,28 @@
 }
 
 form{
-  padding: 10px;
+  padding: 10px 0px;
+}
+
+h3{
+  padding-bottom: 0px;
 }
 
 .group{
   padding: 10px 0px;
 }
 
-h3{
-  padding-top: 15px;
-}
-
 h6{
   font-weight: bold;
 }
+
 label{
   font-weight: bold;
 }
+.searchfield{
+  width: 80%;
+}
+
 .unchangingVals{
   margin-top: 10px;
   padding: 5px;
@@ -52,22 +57,27 @@ label{
 
 footer{
   background-color: #00274c;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
+
 footer img{
   padding: 5px;
   height: 40px;
 }
 
 .maplegend{
-  padding: 2px;
+  padding-top: 5px;
 }
 
 /* basic positioning */
 .legend {
   border: 1px solid black;
   list-style: none; 
-  padding: 10px;
+  padding: 8px;
 }
+
 .legend li { 
   /* display: block; */
   padding-right: 15px;
@@ -83,7 +93,8 @@ footer img{
 /* your colors */
 
 .legend .red { 
-  background-color: red; }
+  background-color: red; 
+}
 
 .legend .yellow { 
   background-color: yellow; 
@@ -93,4 +104,13 @@ footer img{
 }
 .legend .purple { 
   background-color: purple; 
+}
+
+.findroadheader{
+  margin: 0px;
+  padding: 0px;
+}
+
+#findsection{
+  padding: 0px 5px;
 }
