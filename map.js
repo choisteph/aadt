@@ -27,15 +27,11 @@ function createMap() {
 
     map.addControl(new mapboxgl.NavigationControl());
 
-    popup = new mapboxgl.Popup();
-
     map.on('click', ({point, lngLat}) =>{
 
         var features = map.queryRenderedFeatures(point, { layers: ['reducedallroads'] });
         // console.log(features);
         var {properties: {PR, BPT, EPT, RDNAME, NFC, CENSUS_TRACT, RU, HOUSING, NO_VEHICLE, RAMP, AADT}} = features[0];
-
-        popup.setLngLat(lngLat).setHTML('<h6>' + RDNAME +'</h6><p>Functional Class: '+NFC + '</p>').addTo(map);
 
         filter = features.reduce(function(memo, features) {
 
@@ -185,8 +181,6 @@ function listenForVals(){
 }
 
 function selectOnMap(road){
-      popup.setLngLat(road.geometry.coordinates[0]).setHTML('<h6>' + road.properties.RDNAME +'</h6><p>Functional Class: '+ road.properties.NFC + '</p>');
-
       map.setFilter("roads-highlighted", filter);
       map.setPaintProperty('roads-highlighted', 'line-color', 'black');
 
