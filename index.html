@@ -45,19 +45,27 @@
           <div class="col-sm-8 searchstuff">
               <div class = "row findRoad">
                   <div class = "col-sm-12">
-                      <h3 class="findroadheader">Road ID</h3>
-                      <div class = "pr d-flex justify-content-start align-items-center">
-                        <h5>PR: </h5>
-                        <p id = "roadPR"></p>
-                      </div>
-                      <div class = "bpt d-flex justify-content-start align-items-center">
-                        <h5>BPT: </h5>
-                        <p id="roadBPT"></p>
-                      </div>
-                      <div class = "ept d-flex justify-content-start align-items-center">
-                          <h5>EPT: </h5>
-                          <p id="roadEPT"></p>
+                      <h3 class="findroadheader" id="valRDNAME">Road Name</h3>
+                      <div class = 'row'>
+                        <div class = "col-sm-4">
+                            <div class = "pr d-flex justify-content-start align-items-center">
+                                <h5>PR: </h5>
+                                <p id = "roadPR"></p>
+                              </div>
                         </div>
+                        <div class = "col-sm-4">
+                            <div class = "bpt d-flex justify-content-start align-items-center">
+                                <h5>BPT: </h5>
+                                <p id="roadBPT"></p>
+                              </div>
+                        </div>
+                        <div class = "col-sm-4">
+                            <div class = "ept d-flex justify-content-start align-items-center">
+                                <h5>EPT: </h5>
+                                <p id="roadEPT"></p>
+                              </div>
+                        </div>
+                      </div>
                   </div> <!-- close col 12-->
                 </div> <!-- close row findRoad-->
           </div>
@@ -65,41 +73,49 @@
         
       </div> <!-- close col md 8-->
       <div class = "col-md-4 infobar">
+        <form onsubmit="calculateNewAADT()">
+         
+          <div class = "form group">
+              <div class= "labels d-flex justify-content-start align-items-center">
+                  <label for="inputNFC">NFC</label>
+                  <small class = "form-text text-muted">Between 0 and 7</small>
+              </div>
+              <input type="number" class = "form-control" id = "inputfieldNFC" aria-label="Functional Class" placeholder="0000"  min="0" max="7">
+          </div>
+          <div class = "form group">
+              <div class= "labels d-flex justify-content-start align-items-center">
+                  <label for="inputRAMPID">RAMP</label>
+                  <small class = "form-text text-muted">0 = No, 1= Yes</small>
+              </div>
+            <input type="number" class = "form-control" id = "inputfieldRAMP" aria-label="Ramp" placeholder = "0000" min="0" max="1">
+          </div>
+          <div class = "form group">
+              <div class= "labels d-flex justify-content-start align-items-center">
+                  <label for="inputRU">RURAL/URBAN</label>
+                  <small class = "form-text text-muted">0 = Rural, 1= Urban</small>
+              </div>
+            <input type="number" class = "form-control" id = "inputfieldRU" aria-label="Rural or Urban" placeholder = "0000" min="0" max="1">
+          </div>
+          <div class = "form group">
+              <div class= "labels d-flex justify-content-start align-items-center">
+                  <label for="inputHOUSING">HOUSING UNITS IN CENSUS TRACT</label>
+              </div>
+            <input type="number" class = "form-control" id = "inputfieldHOUSING" aria-label="Housing" placeholder="0000">
+          </div>
+          <div class = "form group">
+              <div class= "labels d-flex justify-content-start align-items-center">
+                  <label for="inputNOVEHICLE">NUMBER OF VEHICLES IN CENSUS TRACT</label>
+              </div>
+            <input type="number" class = "form-control" id = "inputfieldNOVEHICLE" aria-label="Number of Vehicles" placeholder="0000">
+          </div>
+          <button type="submit" class = "btn btn-primary submitbutton" onclick = "calculateNewAADT()">Calculate AADT</button>
+        </form>
         <div class = "unchangingVals">
             <h4 id = "semcogAADT">AADT - SEMCOG</h4>
             <p id = "valSemcogAADT">0000</p>
             <h4 id = "estimAADT">AADT - ESTIMATED</h4>
             <p id = "valEstimAADT">0000</p>
-            <h4 id = "rdName">Road Name:</h4>
-            <p id = "valRDNAME">ROAD NAME</p>
         </div>
-        <form onsubmit="calculateNewAADT()">
-         
-          <div class = "form group">
-            <label for="inputNFC">NFC</label>
-            <small class = "form-text text-muted">Between 0 and 7</small>
-            <input type="number" class = "form-control" id = "inputfieldNFC" aria-label="Functional Class" placeholder="0000"  min="0" max="7">
-          </div>
-          <div class = "form group">
-            <label for="inputRAMPID">RAMP</label>
-            <small class = "form-text text-muted">0 = No, 1= Yes</small>
-            <input type="number" class = "form-control" id = "inputfieldRAMP" aria-label="Ramp" placeholder = "0000" min="0" max="1">
-          </div>
-          <div class = "form group">
-            <label for="inputRU">RURAL/URBAN</label>
-            <small class = "form-text text-muted">0 = Rural, 1= Urban</small>
-            <input type="number" class = "form-control" id = "inputfieldRU" aria-label="Rural or Urban" placeholder = "0000" min="0" max="1">
-          </div>
-          <div class = "form group">
-            <label for="inputHOUSING">HOUSING</label>
-            <input type="number" class = "form-control" id = "inputfieldHOUSING" aria-label="Housing" placeholder="0000">
-          </div>
-          <div class = "form group">
-            <label for="inputNOVEHICLE">NUMBER OF VEHICLES</label>
-            <input type="number" class = "form-control" id = "inputfieldNOVEHICLE" aria-label="Number of Vehicles" placeholder="0000">
-          </div>
-          <button type="submit" class = "btn btn-primary submitbutton" onclick = "calculateNewAADT()">Calculate AADT</button>
-        </form>
       </div> <!-- close col 4-->
     </div>
     <footer class = "footer row">
