@@ -33,7 +33,7 @@ function createMap() {
         // console.log(features);
         var {properties: {PR, BPT, EPT, RDNAME, NFC, CENSUS_TRACT, RU, HOUSING, NO_VEHICLE, RAMP, AADT}} = features[0];
 
-        filter = features.reduce(function(memo, features) {
+        var filter = features.reduce(function(memo, features) {
 
             memo[1].push(features.properties.PR);
             memo[2].push(features.properties.BPT);
@@ -60,10 +60,10 @@ function createMap() {
         housing = HOUSING ;
         novehicle = NO_VEHICLE ;
         ramp = RAMP ;
-        if (AADT){
+        if (AADT != null){
             aadt = AADT;
         } else {
-            aadt = 0;
+            aadt = "N/A";
         }
 
         updateVals();
@@ -117,6 +117,7 @@ function createMap() {
 
 function updateVals(){
     console.log('got to updateVals');
+    valRDNAME = document.querySelector("#valRDNAME");
     valSemcogAADT = document.querySelector("#valSemcogAADT");
     valEstimAADT = document.querySelector("#valEstimAADT")
     inp_NFC = document.querySelector("#inputfieldNFC");
@@ -129,6 +130,7 @@ function updateVals(){
     inp_BPT = document.querySelector("#inputfieldBPT");
     inp_PR = document.querySelector("#inputfieldPR");
 
+    valRDNAME.innerHTML = rdname;
     valSemcogAADT.innerHTML = aadt;
     inp_NFC.value = nfc;
     inp_RAMP.value = ramp;
@@ -160,28 +162,31 @@ function updateFromSearch(object){
 
 function listenForVals(){
     event.preventDefault();
+    console.log("run")
     // valSemcogAADT = document.querySelector("#valSemcogAADT").value;
     inp_EPT = document.querySelector("#inputfieldEPT").value;
     inp_BPT = document.querySelector("#inputfieldBPT").value;
-    inp_PR = document.querySelector("#inputfieldPR").value;
-
+    inp_PR = parseInt(document.querySelector("#inputfieldPR").value);
     
     map.queryRenderedFeatures({layers : ['reducedallroads']}).map(j => j)
                                                              .forEach( obj => {
-                                                                  if ( obj.properties.EPT === ept ){
-                                                                      if (obj.properties.BPT === bpt){
-                                                                          if (obj.properties.PR === pr){
-                                                                                console.log("match");
+
+                                                                  if ( obj.properties.EPT == inp_EPT && obj.properties.BPT == inp_BPT && obj.properties.PR == inp_PR){
+                                                                      console.log("we found a match");
+                                                                      console.log(obj);
                                                                                 selectOnMap(obj);
                                                                                 updateFromSearch(obj);
                                                                           }
-                                                                      }
-                                                                  }
                                                             });
 }
 
 function selectOnMap(road){
-      map.setFilter("roads-highlighted", filter);
+    // console.log(road);
+      map.setFilter("roads-highlighted", [ "all",
+      ["in", 'PR'],
+      ["in", 'BPT'],
+      ["in", 'EPT']
+  ] );
       map.setPaintProperty('roads-highlighted', 'line-color', 'black');
 
 }
@@ -196,7 +201,7 @@ function calculateNewAADT(){
     val_HOUSING = parseInt(document.querySelector("#inputfieldHOUSING").value);
     val_NOVEHICLE = parseInt(document.querySelector("#inputfieldNOVEHICLE").value) / 1000;
 
-    let rampFlag = -193.921;
+  ;
     let vehicHousing = val_NOVEHICLE - val_HOUSING;
 
     function coefficientNFC(){
@@ -223,6 +228,9 @@ function calculateNewAADT(){
         } else {
             return 0
         }
+    };
+    function rampFlag(){
+        return -193.921 * val_RAMP
     };
 
     function nfcRAMP(){
@@ -271,7 +279,7 @@ function calculateNewAADT(){
         }
     };
 
-    estimaadt = Math.round( Math.pow((264.208 + coefficientNFC() + vehicleMinusHousing() + rampFlag + ruralUrban() + nfcRAMP() + nfcVEHICLEHOUSING() +  nfcIFURBAN()), 2))
+    estimaadt = Math.round( Math.pow((264.208 + coefficientNFC() + vehicleMinusHousing() + rampFlag() + ruralUrban() + nfcRAMP() + nfcVEHICLEHOUSING() +  nfcIFURBAN()), 2))
 
     valEstimAADT.innerHTML = estimaadt.toLocaleString();
     // val_AADT.innerHTML = "we did it"
