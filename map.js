@@ -57,8 +57,9 @@ function createMap() {
         nfc = NFC ;
         censustract = CENSUS_TRACT ;
         ru = RU ;
-        housing = HOUSING ;
         novehicle = NO_VEHICLE ;
+        // housing = HOUSING ;
+        housing = novehicle - 100 ; 
         ramp = RAMP ;
         if (AADT != null){
             aadt = AADT;
@@ -126,70 +127,70 @@ function updateVals(){
     inp_HOUSING = document.querySelector("#inputfieldHOUSING");
     inp_NOVEHICLE = document.querySelector("#inputfieldNOVEHICLE");
     inp_RDNAME = document.querySelector("#valRDNAME");
-    inp_EPT = document.querySelector("#inputfieldEPT");
-    inp_BPT = document.querySelector("#inputfieldBPT");
-    inp_PR = document.querySelector("#inputfieldPR");
+    inp_EPT = document.querySelector("#roadEPT");
+    inp_BPT = document.querySelector("#roadBPT");
+    inp_PR = document.querySelector("#roadPR");
 
     valRDNAME.innerHTML = rdname;
     valSemcogAADT.innerHTML = aadt;
     inp_NFC.value = nfc;
     inp_RAMP.value = ramp;
     inp_RU.value= ru;
-    inp_HOUSING.value = housing;
+    inp_HOUSING.value = housing * 1000;
     inp_NOVEHICLE.value= novehicle * 1000;
     inp_RDNAME.innerHTML = rdname;
-    inp_EPT.value = ept;
-    inp_BPT.value = bpt;
-    inp_PR.value= pr;
+    inp_EPT.innerHTML = ept;
+    inp_BPT.innerHTML = bpt;
+    inp_PR.innerHTML= pr;
   }
 
-function updateFromSearch(object){
-    console.log('got to updatefromsearch')
-    aadt = object.properties.AADT;
-    nfc = object.properties.NFC;
-    ramp = object.properties.RAMP;
-    ru = object.properties.RU;
-    housing = object.properties.HOUSING;
-    novehicle = object.properties.NO_VEHICLE;
-    pr = object.properties.PR ;
-    bpt = object.properties.BPT ;
-    ept = object.properties.EPT ;
-    rdname = object.properties.RDNAME ;
-    censustract = object.properties.CENSUS_TRACT ;
+// function updateFromSearch(object){
+//     console.log('got to updatefromsearch')
+//     aadt = object.properties.AADT;
+//     nfc = object.properties.NFC;
+//     ramp = object.properties.RAMP;
+//     ru = object.properties.RU;
+//     housing = object.properties.HOUSING;
+//     novehicle = object.properties.NO_VEHICLE;
+//     pr = object.properties.PR ;
+//     bpt = object.properties.BPT ;
+//     ept = object.properties.EPT ;
+//     rdname = object.properties.RDNAME ;
+//     censustract = object.properties.CENSUS_TRACT ;
 
-    updateVals();
-}
+//     updateVals();
+// }
 
-function listenForVals(){
-    event.preventDefault();
-    console.log("run")
-    // valSemcogAADT = document.querySelector("#valSemcogAADT").value;
-    inp_EPT = document.querySelector("#inputfieldEPT").value;
-    inp_BPT = document.querySelector("#inputfieldBPT").value;
-    inp_PR = parseInt(document.querySelector("#inputfieldPR").value);
+// function listenForVals(){
+//     event.preventDefault();
+//     console.log("run")
+//     // valSemcogAADT = document.querySelector("#valSemcogAADT").value;
+//     inp_EPT = document.querySelector("#inputfieldEPT").value;
+//     inp_BPT = document.querySelector("#inputfieldBPT").value;
+//     inp_PR = parseInt(document.querySelector("#inputfieldPR").value);
     
-    map.queryRenderedFeatures({layers : ['reducedallroads']}).map(j => j)
-                                                             .forEach( obj => {
+//     map.queryRenderedFeatures({layers : ['reducedallroads']}).map(j => j)
+//                                                              .forEach( obj => {
 
-                                                                  if ( obj.properties.EPT == inp_EPT && obj.properties.BPT == inp_BPT && obj.properties.PR == inp_PR){
-                                                                      console.log("we found a match");
-                                                                      console.log(obj);
-                                                                                selectOnMap(obj);
-                                                                                updateFromSearch(obj);
-                                                                          }
-                                                            });
-}
+//                                                                   if ( obj.properties.EPT == inp_EPT && obj.properties.BPT == inp_BPT && obj.properties.PR == inp_PR){
+//                                                                       console.log("we found a match");
+//                                                                       console.log(obj);
+//                                                                                 selectOnMap(obj);
+//                                                                                 updateFromSearch(obj);
+//                                                                           }
+//                                                             });
+// }
 
-function selectOnMap(road){
-    // console.log(road);
-      map.setFilter("roads-highlighted", [ "all",
-      ["in", 'PR'],
-      ["in", 'BPT'],
-      ["in", 'EPT']
-  ] );
-      map.setPaintProperty('roads-highlighted', 'line-color', 'black');
+// function selectOnMap(road){
+//     // console.log(road);
+//       map.setFilter("roads-highlighted", [ "all",
+//       ["in", 'PR'],
+//       ["in", 'BPT'],
+//       ["in", 'EPT']
+//   ] );
+//       map.setPaintProperty('roads-highlighted', 'line-color', 'black');
 
-}
+// }
 
 function calculateNewAADT(){
     console.log("calculate");
@@ -198,7 +199,7 @@ function calculateNewAADT(){
     val_NFC = parseInt(document.querySelector("#inputfieldNFC").value);
     val_RAMP = parseInt(document.querySelector("#inputfieldRAMP").value);
     val_RU = parseInt(document.querySelector("#inputfieldRU").value);
-    val_HOUSING = parseInt(document.querySelector("#inputfieldHOUSING").value);
+    val_HOUSING = parseInt(document.querySelector("#inputfieldHOUSING").value) / 1000;
     val_NOVEHICLE = parseInt(document.querySelector("#inputfieldNOVEHICLE").value) / 1000;
 
   ;
@@ -278,6 +279,7 @@ function calculateNewAADT(){
             return 0
         }
     };
+    
 
     estimaadt = Math.round( Math.pow((264.208 + coefficientNFC() + vehicleMinusHousing() + rampFlag() + ruralUrban() + nfcRAMP() + nfcVEHICLEHOUSING() +  nfcIFURBAN()), 2))
 

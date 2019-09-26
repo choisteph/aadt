@@ -49,6 +49,11 @@ label{
   width: 80%;
 }
 
+h5{
+  font-size: 12pt;
+  margin: 0px;
+}
+
 .unchangingVals{
   margin-top: 10px;
   padding: 5px;
@@ -113,4 +118,24 @@ footer img{
 
 #findsection{
   padding: 0px 5px;
+}
+
+
+#roadPR{
+  margin: 0px;
+  padding-left: 5px;
+}
+
+#roadBPT{
+  margin: 0px;
+  padding-left: 5px;
+}
+
+#roadEPT{
+  margin: 0px;
+  padding-left: 5px;
+}
+
+.pr, .bpt, .ept{
+  padding: 10px 0px;
 }
