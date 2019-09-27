@@ -9,7 +9,7 @@ var ru = 0 ;
 var housing = 0 ;
 var novehicle = "" ;
 var ramp = 0 ;
-var aadt = 0 ;
+var aadt = "" ;
 var estimaadt = 0 ;
 
 
@@ -62,7 +62,7 @@ function createMap() {
         housing = HOUSING ;
         ramp = RAMP ;
         if (AADT != null){
-            aadt = AADT;
+            aadt = parseInt(AADT);
         } else {
             aadt = "N/A";
         }
