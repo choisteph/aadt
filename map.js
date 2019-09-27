@@ -139,7 +139,7 @@ function updateVals(){
     estimAADT = document.querySelector("#estimAADT")
 
     valRDNAME.innerHTML = rdname;
-    valSemcogAADT.innerHTML = aadt;
+    valSemcogAADT.innerHTML = aadt.toLocaleString();
     inp_NFC.value = nfc;
     inp_RAMP.value = ramp;
     inp_RU.value= ru;
@@ -152,7 +152,7 @@ function updateVals(){
     if (nfc == 0 || nfc == 6 || nfc == 7){
         valEstimAADT.innerHTML = "N/A"
     } else  {
-        valEstimAADT.innerHTML = estimaadt
+        valEstimAADT.innerHTML = estimaadt.toLocaleString();
     }
   };
 
