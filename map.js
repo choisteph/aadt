@@ -10,6 +10,7 @@ var housing = 0 ;
 var novehicle = "" ;
 var ramp = 0 ;
 var aadt = 0 ;
+var estimaadt = 0 ;
 
 
 // //input is roadid, populates sidebar form // return aadt
@@ -31,7 +32,7 @@ function createMap() {
 
         var features = map.queryRenderedFeatures(point, { layers: ['reducedallroads'] });
         // console.log(features);
-        var {properties: {PR, BPT, EPT, RDNAME, NFC, CENSUS_TRACT, RU, HOUSING, NO_VEHICLE, RAMP, AADT}} = features[0];
+        var {properties: {PR, BPT, EPT, RDNAME, NFC, CENSUS_TRACT, RU, HOUSING, NO_VEHICLE, RAMP, AADT, ESTIMATED_AADT}} = features[0];
 
         var filter = features.reduce(function(memo, features) {
 
@@ -58,14 +59,14 @@ function createMap() {
         censustract = CENSUS_TRACT ;
         ru = RU ;
         novehicle = NO_VEHICLE ;
-        // housing = HOUSING ;
-        housing = novehicle - 100 ; 
+        housing = HOUSING ;
         ramp = RAMP ;
         if (AADT != null){
             aadt = AADT;
         } else {
             aadt = "N/A";
         }
+        estimaadt = ESTIMATED_AADT
 
         updateVals();
     })
@@ -75,22 +76,28 @@ function createMap() {
       // https://docs.mapbox.com/mapbox-gl-js/example/data-driven-circle-colors/
       //https://docs.mapbox.com/help/tutorials/mapbox-gl-js-expressions/
       //https://stackoverflow.com/questions/47951532/mapbox-gl-expressions
-         map.setPaintProperty('reducedallroads', 'line-color', ['step',
-              ['get', 'NFC'],
-              'red', 2,
-              'yellow', 4,
-              'blue', 6,
-             'purple'
+        
+         map.setPaintProperty('reducedallroads', 'line-color', ["step",
+             ["get", "ESTIMATED_AADT"],
+              'gray', 1, //gray
+              '#7A5F16', 1000,  //green-brown
+              '#009c96', 4000, //teal
+              '#821807', 6000,  //red
+              '#3E006B', 8000, //purple
+              '#075482', 10000, //blue
+              '#067815' //green
          ]);
+        
+
          map.addSource('reducedallroads-highlight', {
             "type": "vector",
-            "url": "mapbox://stchoi.8knoxxji"
+            "url": "mapbox://stchoi.3myu05ki"
         });
          map.addLayer({
             "id": "roads-highlighted",
             "type": "line",
             "source": "reducedallroads-highlight",
-            "source-layer": "washtenaw_roads-5dftqu",
+            "source-layer": "washtenaw_roads_est_aadt-afk5hb",
             "filter": [ "all",
                 ["in", 'PR'],
                 ["in", 'BPT'],
@@ -130,6 +137,7 @@ function updateVals(){
     inp_EPT = document.querySelector("#roadEPT");
     inp_BPT = document.querySelector("#roadBPT");
     inp_PR = document.querySelector("#roadPR");
+    estimAADT = document.querySelector("#estimAADT")
 
     valRDNAME.innerHTML = rdname;
     valSemcogAADT.innerHTML = aadt;
@@ -142,6 +150,7 @@ function updateVals(){
     inp_EPT.innerHTML = ept;
     inp_BPT.innerHTML = bpt;
     inp_PR.innerHTML= pr;
+    estimAADT.innerHTML = estimaadt
   }
 
 // function updateFromSearch(object){
@@ -281,8 +290,8 @@ function calculateNewAADT(){
     };
     
 
-    estimaadt = Math.round( Math.pow((264.208 + coefficientNFC() + vehicleMinusHousing() + rampFlag() + ruralUrban() + nfcRAMP() + nfcVEHICLEHOUSING() +  nfcIFURBAN()), 2))
+    estimateAADT = Math.round( Math.pow((264.208 + coefficientNFC() + vehicleMinusHousing() + rampFlag() + ruralUrban() + nfcRAMP() + nfcVEHICLEHOUSING() +  nfcIFURBAN()), 2))
 
-    valEstimAADT.innerHTML = estimaadt.toLocaleString();
+    valEstimAADT.innerHTML = estimateAADT.toLocaleString();
     // val_AADT.innerHTML = "we did it"
 }
