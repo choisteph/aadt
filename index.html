@@ -32,17 +32,20 @@
           </div> <!--close col 12-->
         </div> <!-- close row mapboxmap-->
         <div class ="row">
-          <div class="col-sm-4 mapkey">
+          <div class="col-sm-5 mapkey">
             <div class="maplegend d-flex justify-content-start align-items-center">
                 <ul class="legend">
-                    <li><span class="red"></span> Class between 0 and 2</li>
-                    <li><span class="yellow"></span> Class between 2 and 4</li>
-                    <li><span class="blue"></span> Class between 4 and 6</li>
-                    <li><span class="purple"></span> Class greater than 6</li>
+                    <li><span class="gray"></span> AADT Estimate is null or 0</li>
+                    <li><span class="greenbrown"></span> AADT Estimate between 0 and 1000</li>
+                    <li><span class="teal"></span> AADT Estimate between 1001 and 4000</li>
+                    <li><span class="red"></span> AADT Estimate between 4001 and 6000</li>
+                    <li><span class="purple"></span> AADT Estimate between 6001 and 8000</li>
+                    <li><span class="blue"></span> AADT Estimate between 8001 and 10000</li>
+                    <li><span class="green"></span> AADT Estimate is greater than 10001</li>
                 </ul>
             </div> <!--close maplegend-->
-          </div> <!--close colsm6 mapkey-->
-          <div class="col-sm-8 searchstuff">
+          </div> <!--close colsm5 mapkey-->
+          <div class="col-sm-7 searchstuff">
               <div class = "row findRoad">
                   <div class = "col-sm-12">
                       <h3 class="findroadheader" id="valRDNAME">Road Name</h3>
@@ -71,7 +74,7 @@
           </div>
         </div> <!--close row-->
         
-      </div> <!-- close col md 8-->
+      </div> <!-- close col sm 7-->
       <div class = "col-md-4 infobar">
         <form onsubmit="calculateNewAADT()">
          
@@ -113,7 +116,8 @@
         <div class = "unchangingVals">
             <h4 id = "semcogAADT">AADT - SEMCOG</h4>
             <p id = "valSemcogAADT">0</p>
-            <h4 id = "estimAADT">AADT - ESTIMATED</h4>
+            <h4 id = "estimatedAADT">AADT - ESTIMATED</h4>
+            <p id = "estimAADT"></p>
             <p id = "valEstimAADT">0</p>
         </div>
       </div> <!-- close col 4-->
