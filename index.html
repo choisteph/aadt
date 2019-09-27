@@ -80,41 +80,41 @@
                   <label for="inputNFC">NFC</label>
                   <small class = "form-text text-muted">Between 0 and 7</small>
               </div>
-              <input type="number" class = "form-control" id = "inputfieldNFC" aria-label="Functional Class" placeholder="0000"  min="0" max="7">
+              <input type="number" class = "form-control" id = "inputfieldNFC" aria-label="Functional Class" value="5" min="1" max="7">
           </div>
           <div class = "form group">
               <div class= "labels d-flex justify-content-start align-items-center">
                   <label for="inputRAMPID">RAMP</label>
                   <small class = "form-text text-muted">0 = No, 1= Yes</small>
               </div>
-            <input type="number" class = "form-control" id = "inputfieldRAMP" aria-label="Ramp" placeholder = "0000" min="0" max="1">
+            <input type="number" class = "form-control" id = "inputfieldRAMP" aria-label="Ramp" value="0" min="0" max="1">
           </div>
           <div class = "form group">
               <div class= "labels d-flex justify-content-start align-items-center">
                   <label for="inputRU">RURAL/URBAN</label>
                   <small class = "form-text text-muted">0 = Rural, 1= Urban</small>
               </div>
-            <input type="number" class = "form-control" id = "inputfieldRU" aria-label="Rural or Urban" placeholder = "0000" min="0" max="1">
+            <input type="number" class = "form-control" id = "inputfieldRU" aria-label="Rural or Urban" value="1" min="0" max="1">
           </div>
           <div class = "form group">
               <div class= "labels d-flex justify-content-start align-items-center">
                   <label for="inputHOUSING">HOUSING UNITS IN CENSUS TRACT</label>
               </div>
-            <input type="number" class = "form-control" id = "inputfieldHOUSING" aria-label="Housing" placeholder="0000">
+            <input type="number" class = "form-control" id = "inputfieldHOUSING" aria-label="Housing" value="0" min="0">
           </div>
           <div class = "form group">
               <div class= "labels d-flex justify-content-start align-items-center">
                   <label for="inputNOVEHICLE">NUMBER OF VEHICLES IN CENSUS TRACT</label>
               </div>
-            <input type="number" class = "form-control" id = "inputfieldNOVEHICLE" aria-label="Number of Vehicles" placeholder="0000">
+            <input type="number" class = "form-control" id = "inputfieldNOVEHICLE" aria-label="Number of Vehicles" value="0" min="0">
           </div>
           <button type="submit" class = "btn btn-primary submitbutton" onclick = "calculateNewAADT()">Calculate AADT</button>
         </form>
         <div class = "unchangingVals">
             <h4 id = "semcogAADT">AADT - SEMCOG</h4>
-            <p id = "valSemcogAADT">0000</p>
+            <p id = "valSemcogAADT">0</p>
             <h4 id = "estimAADT">AADT - ESTIMATED</h4>
-            <p id = "valEstimAADT">0000</p>
+            <p id = "valEstimAADT">0</p>
         </div>
       </div> <!-- close col 4-->
     </div>
