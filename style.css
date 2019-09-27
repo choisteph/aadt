@@ -1,5 +1,9 @@
 #content{
-  padding: 15px;
+  height:100%;
+}
+.row.content {
+  height:auto;
+  padding: 10px;
 }
 
 #map{
@@ -165,4 +169,13 @@ small{
   margin: 0px !important;
   padding: 0px;
   padding-left: 5px;
+}
+@media screen and (max-width:800px){
+  body{
+    position: relative;
+  }
+  footer{
+    position: relative;
+    width: 100%;
+  }
 }
