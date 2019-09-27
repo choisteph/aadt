@@ -88,10 +88,13 @@ footer img{
   padding: 8px;
 }
 
-.legend li { 
+.legend dd { 
   /* display: block; */
   padding-right: 15px;
   font-size: 9pt;
+}
+.legend dt{
+  padding: 2px 0px;
 }
 
 .legend span { 
@@ -107,27 +110,24 @@ footer img{
   background-color: gray; 
 }
 
-.legend .greenbrown { 
-  background-color: #7A5F16; 
+.legend .lightest { 
+  background-color: #FF7D01; 
 }
-.legend .teal { 
-  background-color: #009c96;
+.legend .light { 
+  background-color: #BF5C00;
 }
-.legend .red { 
-  background-color: #821807; 
-}
-
-.legend .purple{
- background-color:#3E006B;
+.legend .medium { 
+  background-color: #994A00; 
 }
 
-.legend .blue{
-  background-color: #075482;
+.legend .dark{
+ background-color:#522700;
 }
 
-.legend .green{
-  background-color: #067815;
+.legend .darkest{
+  background-color: #170B00;
 }
+
 
 .findroadheader{
   margin: 0px;

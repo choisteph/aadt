@@ -80,12 +80,11 @@ function createMap() {
          map.setPaintProperty('reducedallroads', 'line-color', ["step",
              ["get", "ESTIMATED_AADT"],
               'gray', 1, //gray
-              '#7A5F16', 1000,  //green-brown
-              '#009c96', 4000, //teal
-              '#821807', 6000,  //red
-              '#3E006B', 8000, //purple
-              '#075482', 10000, //blue
-              '#067815' //green
+              '#FF7D01', 1000,  //lightest
+              '#BF5C00', 6000, //light
+              '#994A00', 8000,  //medium
+              '#522700', 10000, //dark
+              '#170B00' //darkest
          ]);
         
 
@@ -144,14 +143,18 @@ function updateVals(){
     inp_NFC.value = nfc;
     inp_RAMP.value = ramp;
     inp_RU.value= ru;
-    inp_HOUSING.value = housing * 1000;
-    inp_NOVEHICLE.value= novehicle * 1000;
+    inp_HOUSING.value = housing;
+    inp_NOVEHICLE.value= novehicle;
     inp_RDNAME.innerHTML = rdname;
     inp_EPT.innerHTML = ept;
     inp_BPT.innerHTML = bpt;
     inp_PR.innerHTML= pr;
-    estimAADT.innerHTML = estimaadt
-  }
+    if (nfc == 0 || nfc == 6 || nfc == 7){
+        valEstimAADT.innerHTML = "N/A"
+    } else  {
+        valEstimAADT.innerHTML = estimaadt
+    }
+  };
 
 // function updateFromSearch(object){
 //     console.log('got to updatefromsearch')
@@ -208,11 +211,11 @@ function calculateNewAADT(){
     val_NFC = parseInt(document.querySelector("#inputfieldNFC").value);
     val_RAMP = parseInt(document.querySelector("#inputfieldRAMP").value);
     val_RU = parseInt(document.querySelector("#inputfieldRU").value);
-    val_HOUSING = parseInt(document.querySelector("#inputfieldHOUSING").value) / 1000;
-    val_NOVEHICLE = parseInt(document.querySelector("#inputfieldNOVEHICLE").value) / 1000;
+    val_HOUSING = parseInt(document.querySelector("#inputfieldHOUSING").value);
+    val_NOVEHICLE = parseInt(document.querySelector("#inputfieldNOVEHICLE").value);
 
   ;
-    let vehicHousing = val_NOVEHICLE - val_HOUSING;
+    let vehicHousing =(val_NOVEHICLE - val_HOUSING)/ 1000;
 
     function coefficientNFC(){
         if (val_NFC == 2){
