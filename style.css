@@ -1,3 +1,4 @@
+
 body{
   position: relative;
 }
@@ -73,12 +74,14 @@ header{
   padding: 5px;
   background-color: #00274c;
   left:0;
-  right:0;
   bottom: 0;
-  width: inherit;
+  width: 100%;
   margin: 0px !important;
 }
-
+.headthing{
+  padding: 0px;
+  width: inherit;
+}
 header img{
   padding: 5px;
   height: 40px;
