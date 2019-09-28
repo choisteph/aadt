@@ -1,8 +1,15 @@
+body{
+  position: relative;
+}
+footer{
+  position: relative;
+  width: 100%;
+}
 #content{
   height:100%;
 }
 .row.content {
-  height:auto;
+  height: auto;
   padding: 10px;
 }
 
@@ -68,7 +75,6 @@ h5{
 footer{
   padding: 5px;
   background-color: #00274c;
-  position: absolute;
   left:0;
   right:0;
   bottom: 0;
@@ -170,12 +176,8 @@ small{
   padding: 0px;
   padding-left: 5px;
 }
-@media screen and (max-width:800px){
-  body{
-    position: relative;
-  }
+@media screen and (min-width:768px){
   footer{
-    position: relative;
-    width: 100%;
+    position: fixed;
   }
 }
