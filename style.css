@@ -95,11 +95,12 @@ footer img{
 .legend {
   border: 1px solid black;
   list-style: none; 
-  padding: 8px;
+  padding: 6px;
 }
 
 .legend dd { 
-  /* display: block; */
+  margin: 0px;
+  padding-top: 3px;
   padding-right: 15px;
   font-size: 9pt;
 }
